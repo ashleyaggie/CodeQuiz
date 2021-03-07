@@ -1,4 +1,4 @@
-// Assign variables
+// Assign variables to html elements for access
 var startBtn = document.querySelector(".start-btn");
 var scoresBtn = document.querySelector(".scores");
 var questionEl = document.querySelector(".title");
@@ -8,6 +8,8 @@ var questionContain = document.querySelector('.container');
 var beginText = document.querySelector('.text');
 var answersList = document.querySelector('.answersList');
 var scoreBoard = document.querySelector('.highscores');
+
+// Array of available questions
 var questions = [
     {
         question: 'What does HTML stand for?',
@@ -99,13 +101,19 @@ var questions = [
         correctAnswer: 'console.log'
     }
 ];
+
+// Declaring variables to call later
 var answers = [];
 var index = 0;
 var score = 0;
 var timeInterval;
 
+// Main code
+
+// Parsing local storage data for display
 var scoresList = JSON.parse(localStorage.getItem("topScores"));
 
+// If no local storage data, set the array to empty
 if (scoresList === null) {
     scoresList = [];
 }
@@ -115,13 +123,14 @@ scoresBtn.addEventListener("click", highScores);
 
 function highScores () {
 
+    // Removing timer and scores button so the code can't be run more than once
     scoresBtn.remove();
     timerEl.remove();
+
+    // Emptying list in HTML so if the user comes to scoreboard from quiz, the buttons will be removed
     answersList.innerHTML = "";
 
-    var storedScores = scoresList;
-
-    // Re-style the h1 so it can be used for the question text.
+    // Re-style the h1 so it can be used for the Highscores title.
     questionContain.style.textAlign = "left";
     questionContain.style.maxWidth = "40%";
     
@@ -131,12 +140,14 @@ function highScores () {
 
     // Change title
     questionEl.innerHTML = "Highscores";
-    if(storedScores === null) {
+
+    // Create a list item for each available score in local storage and append to the created HTML list
+    if(scoresList === null) {
          
     } else {
-        for (var i = 0; i < storedScores.length; i++) {
+        for (var i = 0; i < scoresList.length; i++) {
             var listItem = document.createElement("li");
-            listItem.innerHTML = storedScores[i];
+            listItem.innerHTML = scoresList[i];
             listItem.classList.add("scoreItem");
             scoreBoard.append(listItem);
         }
@@ -146,6 +157,7 @@ function highScores () {
     var goBackBtn = document.createElement("button");
     goBackBtn.innerHTML = "Go Back";
     questionContain.append(goBackBtn);
+
     goBackBtn.addEventListener("click",function goBack(){
         location.reload();
     });
@@ -154,6 +166,7 @@ function highScores () {
     var clearBtn = document.createElement("button");
     clearBtn.innerHTML = "Clear Highscores";
     questionContain.append(clearBtn);
+
     clearBtn.addEventListener("click",function clearStorage(){
         localStorage.clear();
         scoreBoard.innerHTML = "";
@@ -163,20 +176,17 @@ function highScores () {
 
 // Game runs
 function gameRun() {
-
-    console.log(score);
     
     // Remove the Start button and beginning screen text.
     beginText.remove();
     startBtn.remove();
+
     // Re-style the h1 so it can be used for the question text.
     questionContain.style.textAlign = "left";
     questionContain.style.maxWidth = "40%";
 
     // Pull a question from array
-    
     var quizQuestion = questions[index];
-    console.log(quizQuestion);
 
     // Show question on screen
     questionEl.textContent = quizQuestion.question;
@@ -189,24 +199,28 @@ function gameRun() {
         button.value = quizQuestion.answers[i];
         listItem.append(button);
         answersList.append(listItem);
+
         button.addEventListener("click", verifyChoice);
     }
 
     // When an answers button is clicked, check if the value matches the correct answer
     function verifyChoice() {
 
-        // If correct, show "Correct!", add 10 to score, and go to new question
+        // If choice matches correct answer, show "Correct!", add 10 to score, and go to new question
         if(event.currentTarget.value === quizQuestion.correctAnswer){
-            if(verify === true){
-                verify.innerHTML = "";
-            }
+
+            // Create text and append to page
             var verify = document.createElement("p");
             verify.classList.add("verify");
             verify.innerHTML = "Correct!";
             questionContain.append(verify);
+
+            // Clear answer buttons
             answersList.innerHTML = "";
+
             score = score + 10;
 
+            // Only show text on screen for 1 second
             verifytimer = 0;
     
             var timeInterval = setInterval(function () {
@@ -219,8 +233,10 @@ function gameRun() {
                 }
             }, 1000);
 
+            // Go to next question in array
             index++;
 
+            // If out of questions from array, end game
             if (index === 10) {
                 gameOver();
             } else {
@@ -230,13 +246,20 @@ function gameRun() {
 
         // If incorrect, show "incorrect!", subtract 10 seconds from time left, and go to new question
         else {
+
+            // Create text and append to page
             var verify = document.createElement("p");
             verify.classList.add("verify");
             verify.innerHTML = "Incorrect!";
-            timeLeft = timeLeft - 10;
             questionContain.append(verify);
-            answersList.innerHTML = "";
 
+            // Clear answer buttons
+            answersList.innerHTML = "";
+            
+            // Subtract 10 from timer
+            timeLeft = timeLeft - 10;
+
+            // Only show text on screen for 1 second
             verifytimer = 0;
     
             var timeInterval = setInterval(function () {
@@ -249,8 +272,10 @@ function gameRun() {
                 }
             }, 1000);
 
+            // Go to next question in array
             index++;
 
+            // If out of questions from array, end game
             if (index === 10) {
                 gameOver();
             } else {
@@ -285,17 +310,27 @@ startBtn.addEventListener("click", function() {
     gameRun();
 })
 
+// End game screen
 function gameOver() {
 
+    // Remove ability to click View Highscores so it doesn't run twice
+    scoresBtn.removeEventListener("click", highScores);
+
+    // Stop timer
     clearInterval(timeInterval);
 
+    // Clear answer buttons
     answersList.innerHTML = "";
+
+    // Update title text
     questionEl.innerHTML = "All done!";
     
+    // Add text showing user's score
     var finalText = document.createElement("p");
     finalText.classList.add("finalText");
     finalText.innerHTML = "Your final score is " + score + ".";
 
+    // Create form to submit initials and score to local storage
     var formEl = document.createElement("form");
     var submitBtn = document.createElement("input");
     submitBtn.setAttribute("type","submit");
@@ -308,26 +343,28 @@ function gameOver() {
     formEl.append(submitBox);
     formEl.append(submitBtn);
 
+    // Click submit button
     submitBtn.addEventListener("click", function(event) {
         event.preventDefault();
-      
-        var scoreEntry = submitBox.value.trim();
-      
-        // Return from function early if submitted todoText is blank
-        if (scoreEntry === "") {
-          return;
-        }
-      
-        // Add new todoText to todos array, clear the input
-        scoresList.push(scoreEntry + " - " + score);
 
-        console.log(scoresList);
-      
+        // Variable for initials submitted
+        var scoreEntry = submitBox.value.trim();
+        
+        // Return from function early if submission is blank
+        if (scoreEntry === "") {
+            return;
+        }
+        
+        // Add new score to highscores array
+        scoresList.push(scoreEntry + " - " + score);
+        
         // Store updated scores in localStorage
         localStorage.setItem("topScores",JSON.stringify(scoresList));
+
+        // Remove submission form and show highscores board
         formEl.remove();
         finalText.remove();
         highScores();
-      });
+    });
 }
 
