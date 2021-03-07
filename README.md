@@ -8,7 +8,7 @@ Quizzes are a good test of timers, editing HTML, and storing to local storage. P
 
 I did my best to make the quiz visually and functionally the same as the gif example we were provided. I wanted to make sure I could use CSS and changing elements in JavaScript to get the end result I was looking for.
 
-While adding information to my repo, I noticed the index I used on my desktop was showing the CSS effects fine, but the website link from my repo was not. I looked into it and someone mentioned that sometimes renaming the files fixes the issue, so I renamed both of my CSS stylesheets and relinked them and it fixed the problem.
+While adding information to my repo, I noticed the index I used on my desktop was showing the CSS effects fine, but the website link from my repo was not. I looked into it and someone mentioned that sometimes renaming the files fixes the issue, so I renamed both of my CSS stylesheets and relinked them and it fixed the problem. However, I changed the names back and it's still working. I think it may have been an issue because in my link, the "a" in Assets was not capitalized originally, but after relinking, it is.
 
 [Deployed Website](https://ashleyaggie.github.io/CodeQuiz/)
 
