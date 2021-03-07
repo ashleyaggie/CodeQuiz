@@ -20,7 +20,45 @@ I did my best to make the quiz visually and functionally the same as the gif exa
 
 ## Changes Made
 
+GIVEN I am taking a code quiz
 
+WHEN I click the start button
+
+THEN a timer starts and I am presented with a question
+
+    * Added event listener for click to start button.
+
+    * Used setInterval function to create and start timer.
+
+    * Pulls a question from array and creates HTML elements to display it on page.
+
+WHEN I answer a question
+
+THEN I am presented with another question
+
+    * After clicking an answer button, runs an if statement to check if it matches the correct answer in the array.
+
+    * Removes buttons and replaces div text and buttons with new question's information
+
+WHEN I answer a question incorrectly
+
+THEN time is subtracted from the clock
+
+    * In if statement, if the clicked button's value does not match the correct answer, it subtracts 10 from the current time
+
+WHEN all questions are answered or the timer reaches 0
+
+THEN the game is over
+
+    * Used if statements so that when timer equals 0 or the array is out of questions, it will run the code for the end game screen
+
+WHEN the game is over
+
+THEN I can save my initials and my score
+
+    * In end game screen, there is an input for initials.
+
+    * After clicking submit, score and initials are saved to local storage.
 
 ## Credits
 
